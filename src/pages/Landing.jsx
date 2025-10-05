@@ -1,4 +1,4 @@
-// Landing.js
+// src/pages/Landing.jsx
 import React from "react";
 import StateCityForm from "../components/StateCityForm";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function Landing() {
   const navigate = useNavigate();
 
-  function handleSearch({state, city}) {
-    // push to search results page with query params
+  function handleSearch({ state, city }) {
     navigate(`/search?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`);
   }
 
@@ -15,7 +14,7 @@ export default function Landing() {
     <div className="page landing">
       <h1>Find medical centers near you</h1>
       <StateCityForm onSearch={handleSearch} />
-      {/* Example carousel area (Swiper) can go here per Figma */}
+      {/* Add Swiper carousel here if desired (see README below) */}
     </div>
   );
 }

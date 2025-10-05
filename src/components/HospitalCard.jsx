@@ -1,20 +1,21 @@
-// HospitalCard.js
+// src/components/HospitalCard.jsx
 import React from "react";
 
 export default function HospitalCard({ hospital, onBook }) {
-  // expected hospital fields: Hospital Name, Address, City, State, ZIP Code, Overall Rating
-  const name = hospital["Hospital Name"] || hospital.hospital_name || hospital.name;
-  const address = hospital["Address"] || hospital.address;
-  const zip = hospital["ZIP Code"] || hospital.zip || hospital.postal_code;
-  const rating = hospital["Overall Rating"] ?? hospital.rating;
+  const name = hospital["Hospital Name"] || hospital.hospital_name || hospital.name || "Hospital";
+  const address = hospital["Address"] || hospital.address || "";
+  const city = hospital["City"] || hospital.city || "";
+  const state = hospital["State"] || hospital.state || "";
+  const zip = hospital["ZIP Code"] || hospital.zip || "";
+  const rating = hospital["Overall Rating"] ?? hospital.rating ?? "N/A";
 
   return (
     <div className="hospital-card">
       <h3>{name}</h3>
       <p>{address}</p>
-      <p>{hospital.City || hospital.city || ""}, {hospital.State || hospital.state}</p>
+      <p>{city}, {state}</p>
       <p>ZIP: {zip}</p>
-      <p>Rating: {rating ?? "N/A"}</p>
+      <p>Rating: {rating}</p>
       <button onClick={() => onBook(hospital)}>Book FREE Center Visit</button>
     </div>
   );

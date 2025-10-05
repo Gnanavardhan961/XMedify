@@ -1,4 +1,4 @@
-// App.js
+// src/App.jsx
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -7,12 +7,11 @@ import SearchResults from "./pages/SearchResults";
 import BookingPage from "./pages/BookingPage";
 import MyBookings from "./pages/MyBookings";
 
-
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <main className="app-main">
+      <main style={{ padding: 16 }}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/search" element={<SearchResults />} />
@@ -23,5 +22,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

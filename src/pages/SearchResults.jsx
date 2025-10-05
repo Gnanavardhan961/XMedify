@@ -1,7 +1,7 @@
-// SearchResults.js
+// src/pages/SearchResults.jsx
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { getMedicalCenters } from "../api";
+import { getMedicalCenters } from "../Api";
 import HospitalCard from "../components/HospitalCard";
 
 export default function SearchResults() {
@@ -10,39 +10,34 @@ export default function SearchResults() {
   const city = searchParams.get("city") || "";
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
   const [hospitals, setHospitals] = useState([]);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!state || !city) return;
     setLoading(true);
-    setError(null);
+    setError("");
     getMedicalCenters(state, city)
-      .then(data => {
-        // backend returns array of hospital objects (map or pass-through)
-        setHospitals(data || []);
-      })
-      .catch(err => setError("Failed to fetch medical centers. Server may be slow."))
+      .then(data => setHospitals(Array.isArray(data) ? data : []))
+      .catch(err => setError("Failed to load medical centers (backend may be slow)"))
       .finally(() => setLoading(false));
   }, [state, city]);
 
   function handleBook(hospital) {
-    // navigate to booking page and pass hospital via state
-    navigate("/my-bookings", { state: { action: "book", hospital, city, state } });
+    // navigate to booking page with hospital in state
+    navigate("/book", { state: { hospital, state, city } });
   }
 
   return (
     <div className="page search-results">
       <h1>{hospitals.length} medical centers available in {city}</h1>
 
-      {loading && <p>Loading medical centers... (backend may be slow)</p>}
+      {loading && <p>Loading medical centers... (backend may take 50-60s)</p>}
       {error && <p className="error">{error}</p>}
 
       <div className="results-grid">
-        {hospitals.map((h, idx) => (
-          <HospitalCard key={idx} hospital={h} onBook={handleBook} />
-        ))}
+        {hospitals.map((h, i) => <HospitalCard key={i} hospital={h} onBook={handleBook} />)}
       </div>
     </div>
   );

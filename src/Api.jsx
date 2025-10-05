@@ -1,8 +1,7 @@
-
-export const BACKEND = "https://meddata-backend.onrender.com";
+// src/api.js
+const BACKEND = "https://meddata-backend.onrender.com";
 
 async function longFetch(url, options = {}, timeout = 75000) {
-
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
   try {
@@ -16,16 +15,15 @@ async function longFetch(url, options = {}, timeout = 75000) {
   }
 }
 
-export function getStates() {
+export async function getStates() {
   return longFetch(`${BACKEND}/states`);
 }
 
-export function getCities(state) {
-  // state passed already sanitized (e.g., Alaska)
+export async function getCities(state) {
+  // state should match backend casing (e.g., Alaska)
   return longFetch(`${BACKEND}/cities/${encodeURIComponent(state)}`);
 }
 
-export function getMedicalCenters(state, city) {
-  const url = `${BACKEND}/data?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`;
-  return longFetch(url);
+export async function getMedicalCenters(state, city) {
+  return longFetch(`${BACKEND}/data?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`);
 }

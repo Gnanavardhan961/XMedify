@@ -1,66 +1,81 @@
-
+// src/components/StateCityForm.jsx
 import React, { useEffect, useState } from "react";
-import { getStates, getCities } from "../api";
+import { getStates, getCities } from "../Api";
 
 export default function StateCityForm({ onSearch }) {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selState, setSelState] = useState("");
+  const [selCity, setSelCity] = useState("");
   const [loadingStates, setLoadingStates] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
+    let mounted = true;
     setLoadingStates(true);
-    setError(null);
+    setError("");
     getStates()
       .then(data => {
-        // expecting array of states
-        setStates(data);
+        if (!mounted) return;
+        setStates(Array.isArray(data) ? data : []);
       })
-      .catch(err => setError("Could not load states"))
+      .catch(err => setError("Failed to load states"))
       .finally(() => setLoadingStates(false));
+    return () => (mounted = false);
   }, []);
 
   useEffect(() => {
-    if (!selectedState) return setCities([]);
+    if (!selState) {
+      setCities([]);
+      return;
+    }
+    let mounted = true;
     setLoadingCities(true);
-    setError(null);
-    getCities(selectedState)
+    setError("");
+    getCities(selState)
       .then(data => {
-        setCities(data);
+        if (!mounted) return;
+        setCities(Array.isArray(data) ? data : []);
       })
-      .catch(err => setError("Could not load cities"))
+      .catch(() => setError("Failed to load cities"))
       .finally(() => setLoadingCities(false));
-  }, [selectedState]);
+    return () => (mounted = false);
+  }, [selState]);
 
   function submit(e) {
     e.preventDefault();
-    if (!selectedState || !selectedCity) return;
-    onSearch({ state: selectedState, city: selectedCity });
+    if (!selState || !selCity) {
+      setError("Please choose state and city");
+      return;
+    }
+    onSearch({ state: selState, city: selCity });
   }
 
   return (
     <form onSubmit={submit} className="state-city-form">
       <div id="state" className="form-group">
         <label htmlFor="stateSelect">State</label>
-        {loadingStates ? <p>Loading states...</p> :
-          <select id="stateSelect" value={selectedState} onChange={e => { setSelectedState(e.target.value); setSelectedCity(""); }}>
+        {loadingStates ? (
+          <p>Loading states...</p>
+        ) : (
+          <select id="stateSelect" value={selState} onChange={e => { setSelState(e.target.value); setSelCity(""); }}>
             <option value="">Select state</option>
             {states.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-        }
+        )}
       </div>
 
       <div id="city" className="form-group">
         <label htmlFor="citySelect">City</label>
-        {loadingCities ? <p>Loading cities...</p> :
-          <select id="citySelect" value={selectedCity} onChange={e => setSelectedCity(e.target.value)}>
+        {loadingCities ? (
+          <p>Loading cities...</p>
+        ) : (
+          <select id="citySelect" value={selCity} onChange={e => setSelCity(e.target.value)}>
             <option value="">Select city</option>
             {cities.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
-        }
+        )}
       </div>
 
       <div className="form-group">
