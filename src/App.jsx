@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar"; // Correct path
+import Navbar from "./components/Navbar/Navbar";
 import LandingPage from "./pages/LandingPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import MyBookingsPage from "./pages/MyBookingsPage";
