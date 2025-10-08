@@ -1,24 +1,23 @@
-// src/App.jsx
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Landing from "./pages/Landing";
-import SearchResults from "./pages/SearchResults";
+import LandingPage from "./pages/LandingPage"; 
+import SearchResultsPage from "./pages/SearchResultsPage";
 import BookingPage from "./pages/BookingPage";
-import MyBookings from "./pages/MyBookings";
+import MyBookingsPage from "./pages/MyBookingsPage";
 
-export default function App() {
+function App() {
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
-      <main style={{ padding: 16 }}>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/search" element={<SearchResults />} />
-          <Route path="/book" element={<BookingPage />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-        </Routes>
-      </main>
-    </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/search" element={<SearchResultsPage />} />
+        <Route path="/booking" element={<BookingPage />} />
+        <Route path="/my-bookings" element={<MyBookingsPage />} />
+      </Routes>
+    </>
   );
 }
+
+export default App;

@@ -1,0 +1,71 @@
+:root{
+  --bg:#f5f7fb;
+  --card:#fff;
+  --accent:#1766d6;
+  --muted:#666;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:#222;
+}
+.container{
+  max-width:1000px;
+  margin:20px auto;
+  padding:0 16px;
+}
+.navbar{
+  background:#ffffff;
+  border-bottom:1px solid #e6eefc;
+  padding:10px 0;
+}
+.nav-inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{font-weight:700; color:var(--accent); text-decoration:none}
+.nav-inner nav a{
+  margin-left:14px; text-decoration:none; color:var(--muted)
+}
+.card{
+  background:var(--card);
+  padding:16px;
+  border-radius:8px;
+  margin-bottom:16px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+.hero{padding:30px 10px; text-align:left}
+.hero h1{margin:0 0 6px 0; color:var(--accent)}
+.search-section .field{margin:8px 0; display:flex; flex-direction:column}
+.field label{font-size:13px; color:var(--muted)}
+.field select, .field input[type="date"]{
+  padding:8px; border:1px solid #e2e8f0; border-radius:6px; margin-top:6px;
+}
+.btn{
+  background:var(--accent); color:white; border:none; padding:10px 12px; border-radius:6px; cursor:pointer;
+}
+.carousel .slide{
+  height:120px; display:flex; align-items:center; justify-content:center; background:#f0f6ff; border-radius:8px;
+}
+.list{display:flex; flex-direction:column; gap:12px;}
+.hospital-card{
+  display:flex; justify-content:space-between; align-items:center;
+}
+.hospital-card .card-left h3{margin:0 0 6px 0}
+.card-right{display:flex; flex-direction:column; align-items:flex-end; gap:8px}
+.booking-card{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+.booking-controls label{display:block; margin-bottom:12px}
+.slots{display:flex; gap:8px; flex-wrap:wrap}
+.slot-btn{border:1px solid #e2e8f0; padding:6px 8px; border-radius:6px; cursor:pointer; background:white}
+.slot-btn.selected{background:var(--accent); color:white; border-color:var(--accent)}
+.selected p{margin:4px 0}
+.bookings-list{display:flex; flex-direction:column; gap:12px}
+.booking-item h3{margin:0 0 6px 0}
+.error{color:crimson}
+@media (max-width:700px){
+  .booking-card{grid-template-columns:1fr}
+  .card-right{align-items:flex-start}
+}

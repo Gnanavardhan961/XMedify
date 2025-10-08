@@ -1,21 +1,41 @@
 import React from "react";
 
-export default function HospitalCard({ hospital, onBook }) {
-  const name = hospital["Hospital Name"] || hospital.hospital_name || hospital.name || "Hospital";
-  const address = hospital["Address"] || hospital.address || "";
-  const city = hospital["City"] || hospital.city || "";
-  const state = hospital["State"] || hospital.state || "";
-  const zip = hospital["ZIP Code"] || hospital.zip || "";
-  const rating = hospital["Overall Rating"] ?? hospital.rating ?? "N/A";
+/*
+ Expected center object fields (from backend):
+  - "Hospital Name" or "hospitalName" or similar
+  - "Address", "City", "State", "ZIP Code", "Overall Rating"
+ We'll attempt multiple keys for safety.
+*/
+
+function getField(obj, possibleKeys) {
+  for (const k of possibleKeys) {
+    if (obj[k] !== undefined) return obj[k];
+    const lower = k.toLowerCase();
+    if (obj[lower] !== undefined) return obj[lower];
+  }
+  return "";
+}
+
+export default function HospitalCard({ center, onBook }) {
+  const name =
+    getField(center, ["Hospital Name", "hospitalName", "name"]) || "Unknown Hospital";
+  const address = getField(center, ["Address", "address"]);
+  const city = getField(center, ["City", "city"]);
+  const state = getField(center, ["State", "state"]);
+  const zip = getField(center, ["ZIP Code", "zip", "zipcode"]);
+  const rating = getField(center, ["Overall Rating", "rating", "overallRating"]);
 
   return (
-    <div className="hospital-card">
-      <h3>{name}</h3>
-      <p>{address}</p>
-      <p>{city}, {state}</p>
-      <p>ZIP: {zip}</p>
-      <p>Rating: {rating}</p>
-      <button onClick={() => onBook(hospital)}>Book FREE Center Visit</button>
+    <div className="hospital-card card">
+      <div className="card-left">
+        <h3>{name}</h3>
+        <p>{address}</p>
+        <p>{city}, {state} {zip}</p>
+      </div>
+      <div className="card-right">
+        <p>Rating: {rating || "N/A"}</p>
+        <button className="btn" onClick={onBook}>Book FREE Center Visit</button>
+      </div>
     </div>
   );
 }

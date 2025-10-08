@@ -1,78 +1,146 @@
-// src/pages/BookingPage.jsx
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function isoDate(d) { return d.toISOString().slice(0, 10); }
+/*
+ Booking rules:
+ - Appointment date: today .. today + 7
+ - Select a time slot. Time slot groups: Today, Morning, Afternoon, Evening (display with <p> tags)
+ - Save booking in localStorage under key 'bookings'
+*/
+
+function formatDateISO(d) {
+  return d.toISOString().slice(0, 10);
+}
 
 export default function BookingPage() {
-  const location = useLocation();
+  const { state } = useLocation();
   const navigate = useNavigate();
-  const hospital = location.state?.hospital;
-  const city = location.state?.city || "";
-  const state = location.state?.state || "";
-
-  if (!hospital) return <div><p>No hospital selected</p></div>;
+  const center = state?.center || {};
+  const city = state?.city || "";
+  const stateName = state?.state || "";
 
   const today = new Date();
-  const min = isoDate(today);
-  const max = isoDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000));
+  const maxDate = new Date();
+  maxDate.setDate(today.getDate() + 7);
 
-  const [date, setDate] = useState(min);
-  const [time, setTime] = useState("");
+  const [date, setDate] = useState(formatDateISO(today));
+  const [slot, setSlot] = useState("");
+  const [timeOfDay, setTimeOfDay] = useState("Today");
 
-  const slots = [
-    "08:00 AM","08:30 AM","09:00 AM","09:30 AM","10:00 AM","10:30 AM",
-    "11:00 AM","01:00 PM","01:30 PM","02:00 PM","03:00 PM","04:00 PM"
-  ];
+  const timeSlots = {
+    Today: ["09:00 AM", "10:00 AM", "11:30 AM", "02:30 PM"],
+    Morning: ["08:30 AM", "09:00 AM", "10:00 AM"],
+    Afternoon: ["12:00 PM", "01:00 PM", "02:30 PM"],
+    Evening: ["04:00 PM", "05:00 PM", "06:00 PM"],
+  };
 
-  function save() {
-    const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+  function saveBooking() {
+    if (!slot) return alert("Select a time slot");
     const booking = {
       id: Date.now(),
-      hospitalName: hospital["Hospital Name"] || hospital.hospital_name || hospital.name,
-      address: hospital["Address"] || hospital.address,
+      center,
       city,
-      state,
-      zip: hospital["ZIP Code"] || hospital.zip || "",
+      state: stateName,
       date,
-      time
+      slot,
     };
-    bookings.push(booking);
-    localStorage.setItem("bookings", JSON.stringify(bookings));
+    const existing = JSON.parse(localStorage.getItem("bookings") || "[]");
+    existing.push(booking);
+    localStorage.setItem("bookings", JSON.stringify(existing));
+    alert("Booking saved!");
     navigate("/my-bookings");
   }
 
+  const minAttr = formatDateISO(today);
+  const maxAttr = formatDateISO(maxDate);
+
+  const centerName = center["Hospital Name"] || center.name || center.hospitalName || "Hospital";
+
   return (
-    <div className="page booking">
-      <h1>Book Appointment</h1>
-      <h3>{hospital["Hospital Name"] || hospital.hospital_name || hospital.name}</h3>
-      <p>{hospital["Address"] || hospital.address}</p>
-      <p>{city}, {state}</p>
-
-      <div className="booking-form">
-        <label>
-          Choose date (within 7 days)
-          <input type="date" min={min} max={max} value={date} onChange={e => setDate(e.target.value)} />
-        </label>
-
-        {/* Time of day texts required as <p> */}
-        <div className="time-of-day">
-          <p>Today</p>
-          <p>Morning</p>
-          <p>Afternoon</p>
-          <p>Evening</p>
+    <div className="container booking-page">
+      <h2>Book center visit</h2>
+      <div className="card booking-card">
+        <div>
+          <h3>{centerName}</h3>
+          <p>{center.Address || center.address}</p>
+          <p>{city}, {stateName}</p>
         </div>
 
-        <label>
-          Choose time slot
-          <select value={time} onChange={e => setTime(e.target.value)}>
-            <option value="">Select slot</option>
-            {slots.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-        </label>
+        <div className="booking-controls">
+          <label>
+            Select date:
+            <input
+              type="date"
+              value={date}
+              min={minAttr}
+              max={maxAttr}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </label>
 
-        <div className="actions">
-          <button disabled={!time} onClick={save}>Confirm Booking</button>
+          <div className="time-groups">
+            <p>Today</p>
+            <div className="slots">
+              {timeSlots.Today.map((t) => (
+                <button
+                  key={t}
+                  className={`slot-btn ${slot === t ? "selected" : ""}`}
+                  onClick={() => { setSlot(t); setTimeOfDay("Today"); }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+
+            <p>Morning</p>
+            <div className="slots">
+              {timeSlots.Morning.map((t) => (
+                <button
+                  key={t}
+                  className={`slot-btn ${slot === t ? "selected" : ""}`}
+                  onClick={() => { setSlot(t); setTimeOfDay("Morning"); }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+
+            <p>Afternoon</p>
+            <div className="slots">
+              {timeSlots.Afternoon.map((t) => (
+                <button
+                  key={t}
+                  className={`slot-btn ${slot === t ? "selected" : ""}`}
+                  onClick={() => { setSlot(t); setTimeOfDay("Afternoon"); }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+
+            <p>Evening</p>
+            <div className="slots">
+              {timeSlots.Evening.map((t) => (
+                <button
+                  key={t}
+                  className={`slot-btn ${slot === t ? "selected" : ""}`}
+                  onClick={() => { setSlot(t); setTimeOfDay("Evening"); }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="selected">
+            <p>Selected date: {date}</p>
+            <p>Time of day: <strong>{timeOfDay}</strong></p>
+            <p>Time slot: <strong>{slot || "None"}</strong></p>
+          </div>
+
+          <div>
+            <button className="btn" onClick={saveBooking}>Confirm Booking</button>
+          </div>
         </div>
       </div>
     </div>
