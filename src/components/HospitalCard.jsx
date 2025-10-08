@@ -1,29 +1,20 @@
 import React from "react";
 
-/*
- Expected center object fields (from backend):
-  - "Hospital Name" or "hospitalName" or similar
-  - "Address", "City", "State", "ZIP Code", "Overall Rating"
- We'll attempt multiple keys for safety.
-*/
-
-function getField(obj, possibleKeys) {
-  for (const k of possibleKeys) {
+function getField(obj, keys) {
+  for (const k of keys) {
     if (obj[k] !== undefined) return obj[k];
-    const lower = k.toLowerCase();
-    if (obj[lower] !== undefined) return obj[lower];
+    if (obj[k.toLowerCase()] !== undefined) return obj[k.toLowerCase()];
   }
   return "";
 }
 
 export default function HospitalCard({ center, onBook }) {
-  const name =
-    getField(center, ["Hospital Name", "hospitalName", "name"]) || "Unknown Hospital";
+  const name = getField(center, ["Hospital Name", "hospitalName", "name"]) || "Unknown Hospital";
   const address = getField(center, ["Address", "address"]);
   const city = getField(center, ["City", "city"]);
   const state = getField(center, ["State", "state"]);
   const zip = getField(center, ["ZIP Code", "zip", "zipcode"]);
-  const rating = getField(center, ["Overall Rating", "rating", "overallRating"]);
+  const rating = getField(center, ["Overall Rating", "rating"]);
 
   return (
     <div className="hospital-card card">
