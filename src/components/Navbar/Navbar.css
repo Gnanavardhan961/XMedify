@@ -1,0 +1,58 @@
+/* Navbar container */
+.navbar {
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 15px 0;
+}
+
+/* Inner container for content alignment */
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Brand / Logo */
+.brand {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+/* Navigation links */
+nav {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+/* Hover effect */
+nav a:hover {
+  color: #3498db;
+}
+
+/* Responsive: stack links on smaller screens */
+@media (max-width: 768px) {
+  .nav-inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+  nav {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
