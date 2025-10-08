@@ -1,8 +1,21 @@
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function BookingPage({ center, onClose }) {
+export default function BookingPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const center = location.state?.center;
+
   const [date, setDate] = useState("");
   const [slot, setSlot] = useState("");
+
+  if (!center) {
+    return (
+      <div className="container">
+        <h2>No center selected</h2>
+      </div>
+    );
+  }
 
   function handleConfirm() {
     if (!date || !slot) return alert("Select date and time");
@@ -19,11 +32,11 @@ export default function BookingPage({ center, onClose }) {
 
     localStorage.setItem("bookings", JSON.stringify([...bookings, newBooking]));
     alert("Booking confirmed!");
-    onClose();
+    navigate("/my-bookings");
   }
 
   return (
-    <div className="booking-section card">
+    <div className="booking-section card container">
       <h2>Book Appointment at {center["Hospital Name"] || center.name}</h2>
 
       <div className="field">
@@ -43,7 +56,7 @@ export default function BookingPage({ center, onClose }) {
       </div>
 
       <button className="btn" onClick={handleConfirm}>Confirm Booking</button>
-      <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+      <button className="btn btn-secondary" onClick={() => navigate(-1)}>Cancel</button>
     </div>
   );
 }

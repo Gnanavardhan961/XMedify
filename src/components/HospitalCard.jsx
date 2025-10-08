@@ -3,13 +3,14 @@ import React from "react";
 function getField(obj, keys) {
   for (const k of keys) {
     if (obj[k] !== undefined) return obj[k];
-    if (obj[k.toLowerCase()] !== undefined) return obj[k.toLowerCase()];
+    const lower = k.toLowerCase();
+    if (obj[lower] !== undefined) return obj[lower];
   }
   return "";
 }
 
 export default function HospitalCard({ center, onBook }) {
-  const name = getField(center, ["Hospital Name", "hospitalName", "name"]) || "Unknown Hospital";
+  const name = getField(center, ["Hospital Name", "hospitalName", "name"]) || "Unknown";
   const address = getField(center, ["Address", "address"]);
   const city = getField(center, ["City", "city"]);
   const state = getField(center, ["State", "state"]);
