@@ -4,8 +4,8 @@ export default function MyBookingsPage() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const b = JSON.parse(localStorage.getItem("bookings") || "[]");
-    setBookings(b);
+    const storedBookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+    setBookings(storedBookings);
   }, []);
 
   return (
@@ -15,15 +15,15 @@ export default function MyBookingsPage() {
         <p>No bookings yet.</p>
       ) : (
         <div className="bookings-list">
-          {bookings.map((bk) => {
+          {bookings.map((bk, index) => {
             const center = bk.center || {};
             const name = center["Hospital Name"] || center.name || center.hospitalName || "Hospital";
             return (
-              <div key={bk.id} className="booking-item card">
+              <div key={bk.id || index} className="booking-item card">
                 <h3>{name}</h3>
                 <p>Date: {bk.date}</p>
                 <p>Time: {bk.slot}</p>
-                <p>City: {bk.city}, State: {bk.state}</p>
+                <p>City: {bk.city || "N/A"}, State: {bk.state || "N/A"}</p>
               </div>
             );
           })}
