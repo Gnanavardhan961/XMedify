@@ -19,16 +19,15 @@ export default function SearchResultsPage() {
 
   useEffect(() => {
     if (!stateName || !cityName) return;
+
     setLoading(true);
-    // fetch with query params
     fetch(`${DATA_API}?state=${encodeURIComponent(stateName)}&city=${encodeURIComponent(cityName)}`)
       .then((res) => res.json())
       .then((data) => {
-        // data expected to be an array — map/extract fields
         setCenters(data || []);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setError("Failed to fetch centers");
         setLoading(false);
       });
@@ -40,10 +39,11 @@ export default function SearchResultsPage() {
 
   return (
     <div className="container search-results">
-      <h1>{centers.length} medical centers available in {cityName}</h1>
+      <h1>{centers.length} medical centers available in {cityName.toLowerCase()}</h1>
 
       {loading && <p>Loading centers (this may take a while)...</p>}
       {error && <p className="error">{error}</p>}
+      {!loading && centers.length === 0 && <p>No medical centers found in {cityName}.</p>}
 
       <div className="list">
         {centers.map((c, idx) => (

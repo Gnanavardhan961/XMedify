@@ -4,27 +4,21 @@ export default function MyBookingsPage() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("bookings") || "[]");
-    setBookings(data);
+    const stored = JSON.parse(localStorage.getItem("bookings")) || [];
+    setBookings(stored);
   }, []);
 
   return (
-    <div className="my-bookings container">
-      <h2>My Bookings</h2>
-      {bookings.length === 0 ? (
-        <p>No bookings yet.</p>
-      ) : (
-        <ul>
-          {bookings.map((b) => (
-            <li key={b.id} className="card">
-              <p><strong>Center:</strong> {b.center["Hospital Name"] || b.center.name}</p>
-              <p><strong>State/City:</strong> {b.state}, {b.city}</p>
-              <p><strong>Date:</strong> {b.date}</p>
-              <p><strong>Time Slot:</strong> {b.slot}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <section className="my-bookings">
+      <h1>My Bookings</h1>
+      {bookings.length === 0 ? <p>No bookings yet.</p> :
+        bookings.map((b, idx) => (
+          <div key={idx} className="booking-card">
+            <h3>{b.hospitalName}</h3>
+            <p>{b.address}, {b.city}, {b.state} {b.zip}</p>
+            <p>{b.date} - {b.timeSlot}</p>
+          </div>
+      ))}
+    </section>
   );
 }
