@@ -19,34 +19,31 @@ export default function LandingPage() {
 
   const navigate = useNavigate();
 
-  // Fetch states
   useEffect(() => {
     setLoadingStates(true);
     fetch(STATES_API)
-      .then((res) => res.json())
-      .then((data) => setStates(data || []))
+      .then(res => res.json())
+      .then(data => setStates(data || []))
       .catch(() => setError("Failed to load states"))
       .finally(() => setLoadingStates(false));
   }, []);
 
-  // Fetch cities
   useEffect(() => {
     if (!stateName) return setCities([]);
     setLoadingCities(true);
     fetch(`${CITIES_API}${encodeURIComponent(stateName)}`)
-      .then((res) => res.json())
-      .then((data) => setCities(data || []))
+      .then(res => res.json())
+      .then(data => setCities(data || []))
       .catch(() => setError("Failed to load cities"))
       .finally(() => setLoadingCities(false));
   }, [stateName]);
 
-  // Fetch hospitals
   useEffect(() => {
     if (!stateName || !cityName) return setHospitals([]);
     setLoadingHospitals(true);
     fetch(`${HOSPITALS_API}${encodeURIComponent(stateName)}/${encodeURIComponent(cityName)}`)
-      .then((res) => res.json())
-      .then((data) => setHospitals(data || []))
+      .then(res => res.json())
+      .then(data => setHospitals(data || []))
       .catch(() => setError("Failed to load hospitals"))
       .finally(() => setLoadingHospitals(false));
   }, [stateName, cityName]);
@@ -66,7 +63,9 @@ export default function LandingPage() {
           <select value={stateName} onChange={(e) => setStateName(e.target.value)}>
             <option value="">-- Select state --</option>
             {loadingStates && <option>Loading...</option>}
-            {states.map((s) => <option key={s} value={s}>{s}</option>)}
+            {states.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
           </select>
         </div>
 
@@ -79,7 +78,9 @@ export default function LandingPage() {
           >
             <option value="">-- Select city --</option>
             {loadingCities && <option>Loading...</option>}
-            {cities.map((c) => <option key={c} value={c}>{c}</option>)}
+            {cities.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
           </select>
         </div>
       </section>
