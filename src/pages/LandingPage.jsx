@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HospitalCard from "../components/HospitalCard";
+import BookingPage from "./BookingPage"; // Correct import
 
 const STATES_API = "https://meddata-backend.onrender.com/states";
-const CITIES_API = "https://meddata-backend.onrender.com/cities/"; // append state
-const HOSPITALS_API = "https://meddata-backend.onrender.com/hospitals/"; // append state/city
+const CITIES_API = "https://meddata-backend.onrender.com/cities/";
+const HOSPITALS_API = "https://meddata-backend.onrender.com/hospitals/";
 
 export default function LandingPage() {
   const [states, setStates] = useState([]);
@@ -72,11 +73,11 @@ export default function LandingPage() {
 
   return (
     <div className="landing container">
-      <section className="search-section card">
+      <section id="search-section" className="search-section card">
         <h2>Find Centers</h2>
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <div className="field">
+        <div id="state" className="field">
           <label>State</label>
           <select value={stateName} onChange={(e) => setStateName(e.target.value)}>
             <option value="">-- Select state --</option>
@@ -87,7 +88,7 @@ export default function LandingPage() {
           </select>
         </div>
 
-        <div className="field">
+        <div id="city" className="field">
           <label>City</label>
           <select
             value={cityName}
@@ -116,7 +117,7 @@ export default function LandingPage() {
       </section>
 
       {selectedCenter && (
-        <BookingSection
+        <BookingPage
           center={selectedCenter}
           onClose={() => setSelectedCenter(null)}
         />
