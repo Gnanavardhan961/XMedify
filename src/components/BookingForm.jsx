@@ -1,63 +1,69 @@
 import React, { useState } from "react";
+import "./BookingForm.css";
 
-const BookingForm = ({ center, onBook }) => {
-  const [selectedDate, setSelectedDate] = useState("");
-  const [timeSlot, setTimeSlot] = useState("");
+const BookingForm = ({ hospital, onClose }) => {
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   const today = new Date();
-  const maxDate = new Date();
-  maxDate.setDate(today.getDate() + 7);
+  const nextWeek = new Date();
+  nextWeek.setDate(today.getDate() + 7);
 
-  const handleBooking = () => {
-    if (!selectedDate || !timeSlot) {
-      alert("Please select both date and time slot");
+  const handleBooking = (e) => {
+    e.preventDefault();
+    if (!date || !time) {
+      alert("Please select both date and time.");
       return;
     }
 
     const newBooking = {
-      center,
-      date: selectedDate,
-      time: timeSlot,
+      hospital: hospital["Hospital Name"],
+      address: hospital.Address,
+      city: hospital.City,
+      state: hospital.State,
+      zip: hospital["ZIP Code"],
+      rating: hospital["Hospital overall rating"],
+      date,
+      time,
     };
 
     const existing = JSON.parse(localStorage.getItem("bookings")) || [];
-    const updated = [...existing, newBooking];
-    localStorage.setItem("bookings", JSON.stringify(updated));
+    localStorage.setItem("bookings", JSON.stringify([...existing, newBooking]));
 
     alert("Appointment booked successfully!");
-    if (onBook) onBook(newBooking);
+    onClose();
   };
 
   return (
-    <div className="booking-form">
-      <h2>Book Appointment for {center["Hospital Name"]}</h2>
+    <div className="booking-card">
+      <h2>Book FREE Center Visit</h2>
+      <form onSubmit={handleBooking}>
+        <label>Select Date (within a week)</label>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          min={today.toISOString().split("T")[0]}
+          max={nextWeek.toISOString().split("T")[0]}
+        />
 
-      <label>Select Date:</label>
-      <input
-        type="date"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-        min={today.toISOString().split("T")[0]}
-        max={maxDate.toISOString().split("T")[0]}
-      />
+        <label>Select Time</label>
+        <div className="time-options">
+          {["Morning", "Afternoon", "Evening"].map((t) => (
+            <label key={t}>
+              <input
+                type="radio"
+                name="time"
+                value={t}
+                onChange={(e) => setTime(e.target.value)}
+              />
+              <p>{t}</p>
+            </label>
+          ))}
+        </div>
 
-      <div className="time-slots">
-        <p>Today</p>
-        <button type="button" onClick={() => setTimeSlot("Morning")}>
-          Morning
-        </button>
-        <button type="button" onClick={() => setTimeSlot("Afternoon")}>
-          Afternoon
-        </button>
-        <button type="button" onClick={() => setTimeSlot("Evening")}>
-          Evening
-        </button>
-      </div>
-
-      <p>Selected Time: {timeSlot || "None"}</p>
-      <button type="button" onClick={handleBooking}>
-        Book FREE Center Visit
-      </button>
+        <button type="submit">Confirm Booking</button>
+      </form>
     </div>
   );
 };

@@ -1,101 +1,83 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./SearchSection.css";
 
 const SearchSection = () => {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch all states on load
+  // Fetch all states
   useEffect(() => {
-    const fetchStates = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("https://meddata-backend.onrender.com/states");
-        const data = await res.json();
-        setStates(data);
-      } catch (err) {
-        console.error("Error fetching states:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStates();
+    fetch("https://meddata-backend.onrender.com/states")
+      .then((res) => res.json())
+      .then((data) => setStates(data))
+      .catch((err) => console.error("Error fetching states:", err));
   }, []);
 
-  // Fetch cities for selected state
+  // Fetch cities when state changes
   useEffect(() => {
     if (selectedState) {
-      const fetchCities = async () => {
-        try {
-          setLoading(true);
-          const res = await fetch(
-            `https://meddata-backend.onrender.com/cities/${selectedState}`
-          );
-          const data = await res.json();
-          setCities(data);
-        } catch (err) {
-          console.error("Error fetching cities:", err);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchCities();
+      fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
+        .then((res) => res.json())
+        .then((data) => setCities(data))
+        .catch((err) => console.error("Error fetching cities:", err));
+    } else {
+      setCities([]);
     }
   }, [selectedState]);
 
-  // Handle form submission
-  const handleSearch = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!selectedState || !selectedCity) return alert("Select both fields!");
-    navigate(`/search?state=${selectedState}&city=${selectedCity}`);
+    if (selectedState && selectedCity) {
+      navigate(`/search?state=${selectedState}&city=${selectedCity}`);
+    } else {
+      alert("Please select both state and city");
+    }
   };
 
   return (
-    <section className="search-section">
-      <form onSubmit={handleSearch}>
-        <div id="state">
-          <label>Select State:</label>
-          <select
-            value={selectedState}
-            onChange={(e) => {
-              setSelectedState(e.target.value);
-              setCities([]); // reset city list
-            }}
-          >
-            <option value="">-- Select State --</option>
-            {states.map((state) => (
-              <option key={state} value={state}>
-                {state}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div className="search-section">
+      <div className="search-card">
+        <h2 className="heading">Find Medical Centers</h2>
+        <form onSubmit={handleSubmit}>
+          <div id="state">
+            <select
+              value={selectedState}
+              onChange={(e) => setSelectedState(e.target.value)}
+            >
+              <option value="">Select State</option>
+              {states.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div id="city">
-          <label>Select City:</label>
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            disabled={!selectedState}
-          >
-            <option value="">-- Select City --</option>
-            {cities.map((city) => (
-              <option key={city} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div id="city">
+            <select
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              disabled={!selectedState}
+            >
+              <option value="">Select City</option>
+              {cities.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <button type="submit" id="searchBtn">
-          {loading ? "Loading..." : "Search"}
-        </button>
-      </form>
-    </section>
+          <button id="searchBtn" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 
