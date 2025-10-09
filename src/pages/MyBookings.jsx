@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import "./BookingForm.css";
+
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);

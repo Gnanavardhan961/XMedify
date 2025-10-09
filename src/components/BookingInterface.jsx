@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./BookingInterface.css";
 
 const times = {
   Morning: ["09:00 AM", "10:00 AM", "11:00 AM"],

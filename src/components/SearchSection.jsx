@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "./SearchSection.css";
 
 const SearchSection = ({ onSearch }) => {
   const [states, setStates] = useState([]);

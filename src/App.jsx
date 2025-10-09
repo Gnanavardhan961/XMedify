@@ -4,6 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import SearchResults from "./pages/SearchResults";
 import MyBookings from "./pages/MyBookings";
+import "./App.css";
+
 
 const App = () => (
   <Routes>
