@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import BookingInterface from "./BookingInterface";
+import BookingInterface from "../components/BookingInterface";
 
 export default function SearchResults() {
   const [medicalCenters, setMedicalCenters] = useState([]);
