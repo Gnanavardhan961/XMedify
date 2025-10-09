@@ -1,20 +1,17 @@
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import SearchResults from "./pages/SearchResults";
-import MyBookings from "./pages/MyBookings";
-import Navbar from "./components/Navbar";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./LandingPage";
+import SearchResults from "./SearchResults";
+import MyBookings from "./MyBookings";
 
-function App() {
-  return (
-    <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<SearchResults />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-      </Routes>
-    </>
-  );
-}
+const App = () => (
+  <Router>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/search" element={<SearchResults />} />
+      <Route path="/my-bookings" element={<MyBookings />} /> {/* Critical path */}
+    </Routes>
+  </Router>
+);
 
 export default App;

@@ -1,35 +1,23 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
-  const location = useLocation();
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("bookings")) || [];
-    if (location.state?.center) {
-      const newBooking = {
-        center: location.state.center,
-        date: new Date().toLocaleDateString(),
-        time: "Morning",
-      };
-      const updated = [...saved, newBooking];
-      localStorage.setItem("bookings", JSON.stringify(updated));
-      setBookings(updated);
-    } else {
-      setBookings(saved);
-    }
-  }, [location.state]);
+    setBookings(JSON.parse(localStorage.getItem("bookings") || "[]"));
+  }, []);
 
   return (
     <div>
       <h1>My Bookings</h1>
-      {bookings.map((b, idx) => (
-        <div key={idx}>
-          <h3>{b.center["Hospital Name"]}</h3>
-          <p>{b.center.City}, {b.center.State}</p>
+      {!bookings.length && <p>No bookings found</p>}
+      {bookings.map((b, i) => (
+        <div key={i}>
+          <h3>{b.hospitalName}</h3>
+          <p>{b.address}</p>
+          <p>{b.city}, {b.state} {b.zipCode}</p>
           <p>Date: {b.date}</p>
-          <p>Time: {b.time}</p>
+          <p>Time: {b.time} ({b.period})</p>
         </div>
       ))}
     </div>
