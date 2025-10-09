@@ -12,15 +12,19 @@ export default function BookingInterface({ center, onClose }) {
   const [selectedPeriod, setSelectedPeriod] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
-  const getDays = () => {
-    return Array.from({ length: 7 }, (_, i) => {
+  const getDays = () =>
+    Array.from({ length: 7 }, (_, i) => {
       const d = new Date();
       d.setDate(d.getDate() + i);
       return d;
     });
-  };
 
   const bookSlot = () => {
+    if (!selectedDate || !selectedPeriod || !selectedTime) {
+      alert("Please select date, period, and time");
+      return;
+    }
+
     const booking = {
       hospitalName: center["Hospital Name"],
       address: center.Address,
@@ -31,41 +35,72 @@ export default function BookingInterface({ center, onClose }) {
       time: selectedTime,
       period: selectedPeriod,
     };
+
     const current = JSON.parse(localStorage.getItem("bookings") || "[]");
     localStorage.setItem("bookings", JSON.stringify([...current, booking]));
-    onClose();
+
     alert("Booking confirmed!");
+    onClose();
   };
 
   return (
-    <div>
+    <div className="booking-interface">
       <h2>Book Appointment at {center["Hospital Name"]}</h2>
-      <div>
-        {getDays().map((dateObj, i) => (
-          <button key={i} onClick={() => setSelectedDate(dateObj.toDateString())}>
-            <p>{i === 0 ? "Today" : dateObj.toDateString()}</p>
-          </button>
-        ))}
+
+      <div className="date-selection">
+        {getDays().map((dateObj, i) => {
+          const dateStr = dateObj.toDateString();
+          return (
+            <button
+              key={i}
+              className={selectedDate === dateStr ? "selected" : ""}
+              onClick={() => setSelectedDate(dateStr)}
+            >
+              <p>{i === 0 ? "Today" : dateStr}</p>
+            </button>
+          );
+        })}
       </div>
+
       {selectedDate && (
-        <div>
-          {Object.keys(times).map(period => (
+        <div className="time-selection">
+          <p>Today</p>
+          {Object.keys(times).map((period) => (
             <div key={period}>
               <p>{period}</p>
-              {times[period].map(time => (
-                <button key={time} onClick={() => {
-                  setSelectedPeriod(period);
-                  setSelectedTime(time);
-                }}>
-                  {time}
-                </button>
-              ))}
+              <div className="time-buttons">
+                {times[period].map((time) => (
+                  <button
+                    key={time}
+                    className={
+                      selectedTime === time && selectedPeriod === period
+                        ? "selected"
+                        : ""
+                    }
+                    onClick={() => {
+                      setSelectedPeriod(period);
+                      setSelectedTime(time);
+                    }}
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
             </div>
           ))}
         </div>
       )}
-      {selectedTime && <button onClick={bookSlot}>Confirm Booking</button>}
-      <button onClick={onClose}>Cancel</button>
+
+      <div className="booking-actions">
+        {selectedTime && (
+          <button className="confirm-btn" onClick={bookSlot}>
+            Confirm Booking
+          </button>
+        )}
+        <button className="cancel-btn" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
     </div>
   );
 }
