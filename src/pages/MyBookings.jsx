@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./BookingForm.css";
+import "./MyBookings.css";
 
 
 export default function MyBookings() {
