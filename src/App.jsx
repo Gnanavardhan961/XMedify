@@ -1,8 +1,10 @@
+// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./LandingPage";
-import SearchResults from "./SearchResults";
-import MyBookings from "./MyBookings";
+import LandingPage from "./pages/LandingPage";
+import SearchResults from "./pages/SearchResults";
+import MyBookings from "./pages/MyBookings";
+
 
 const App = () => (
   <Router>
