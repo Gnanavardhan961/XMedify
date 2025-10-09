@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from "react";
 import "./MyBookings.css";
 
-
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    setBookings(JSON.parse(localStorage.getItem("bookings") || "[]"));
+    // Load all saved bookings from localStorage
+    const saved = JSON.parse(localStorage.getItem("bookings") || "[]");
+    setBookings(saved);
   }, []);
 
   return (
-    <div>
+    <div className="my-bookings">
       <h1>My Bookings</h1>
-      {!bookings.length && <p>No bookings found</p>}
+
+      {/* No bookings found message */}
+      {bookings.length === 0 && <p>No bookings found</p>}
+
+      {/* Render each booking */}
       {bookings.map((b, i) => (
-        <div key={i}>
-          <h3>{b.hospitalName}</h3>
+        <div key={i} className="booking-card">
+          <h3>{b.hospital || b.hospitalName}</h3>
           <p>{b.address}</p>
-          <p>{b.city}, {b.state} {b.zipCode}</p>
+          <p>
+            {b.city}, {b.state} {b.zipCode}
+          </p>
           <p>Date: {b.date}</p>
-          <p>Time: {b.time} ({b.period})</p>
+          <p>Time: {b.slot || b.time} ({b.period || "Morning"})</p>
         </div>
       ))}
     </div>
