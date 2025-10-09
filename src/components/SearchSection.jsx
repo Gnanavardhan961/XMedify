@@ -1,7 +1,6 @@
-// src/components/SearchSection.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './SearchSection.css';
 
 const SearchSection = () => {
   const [states, setStates] = useState([]);
@@ -10,22 +9,35 @@ const SearchSection = () => {
   const [selectedCity, setSelectedCity] = useState('');
   const [showStateList, setShowStateList] = useState(false);
   const [showCityList, setShowCityList] = useState(false);
+  const [isCityLoading, setIsCityLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Fetch all states
   useEffect(() => {
     fetch('https://meddata-backend.onrender.com/states')
-      .then(res => res.json())
-      .then(setStates);
+      .then((res) => res.json())
+      .then(setStates)
+      .catch(() => setStates([]));
   }, []);
 
+  // Fetch cities when a state is selected
   useEffect(() => {
     if (selectedState) {
+      setIsCityLoading(true);
       fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
-        .then(res => res.json())
-        .then(setCities);
+        .then((res) => res.json())
+        .then((data) => {
+          setCities(data);
+          setIsCityLoading(false);
+        })
+        .catch(() => {
+          setCities([]);
+          setIsCityLoading(false);
+        });
     }
   }, [selectedState]);
 
+  // Select a state
   const handleStateSelect = (state) => {
     setSelectedState(state);
     setSelectedCity('');
@@ -34,107 +46,90 @@ const SearchSection = () => {
     setShowCityList(false);
   };
 
+  // Select a city
   const handleCitySelect = (city) => {
     setSelectedCity(city);
     setShowCityList(false);
   };
 
+  // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedState && selectedCity) {
-      navigate("/search", { state: { state: selectedState, city: selectedCity } });
+    if (!selectedState) {
+      alert('Please select a state first!');
+      return;
     }
+    if (!selectedCity) {
+      alert('Please select a city!');
+      return;
+    }
+    navigate('/search', {
+      state: { state: selectedState, city: selectedCity },
+    });
   };
 
   return (
     <form className="search-form" onSubmit={handleSubmit}>
-      <div id="state" className="dropdown-wrapper" style={{ position: 'relative', marginBottom: 20 }}>
+      {/* State Dropdown */}
+      <div id="state" className="dropdown-wrapper">
         <label>State</label>
         <div
           className="dropdown"
           tabIndex={0}
           onClick={() => setShowStateList((prev) => !prev)}
-          style={{
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: 6,
-            cursor: "pointer",
-            background: "#f9f9f9"
-          }}>
-          {selectedState || "Select State"}
+        >
+          {selectedState || 'Select State'}
         </div>
-        {/* VISIBLE LI LIST FOR CYPRESS */}
+
         {showStateList && (
-          <ul style={{
-            listStyle: "none",
-            margin: 0,
-            padding: "0",
-            boxShadow: "0 1px 6px rgba(0,0,0,0.1)",
-            borderRadius: "6px",
-            background: "#fff",
-            position: "absolute",
-            width: "100%",
-            zIndex: 9,
-            maxHeight: 160,
-            overflowY: "auto"
-          }}>
-            {states.map(state => (
-              <li
-                key={state}
-                style={{ padding: "10px", cursor: "pointer" }}
-                onClick={() => handleStateSelect(state)}
-              >
-                {state}
-              </li>
-            ))}
+          <ul className="dropdown-list">
+            {states.length > 0 ? (
+              states.map((state) => (
+                <li key={state} onClick={() => handleStateSelect(state)}>
+                  {state}
+                </li>
+              ))
+            ) : (
+              <li className="disabled">Loading states...</li>
+            )}
           </ul>
         )}
       </div>
-      <div id="city" className="dropdown-wrapper" style={{ position: 'relative', marginBottom: 20 }}>
+
+      {/* City Dropdown */}
+      <div id="city" className="dropdown-wrapper">
         <label>City</label>
         <div
-          className="dropdown"
+          className={`dropdown ${!selectedState ? 'disabled' : ''}`}
           tabIndex={0}
-          style={{
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: 6,
-            cursor: (selectedState ? "pointer" : "not-allowed"),
-            background: "#f9f9f9",
-            color: selectedState ? "#222" : "#aaa"
-          }}
-          onClick={() => selectedState && setShowCityList((prev) => !prev)}
+          onClick={() =>
+            selectedState && setShowCityList((prev) => !prev)
+          }
         >
-          {selectedCity || "Select City"}
+          {selectedCity || 'Select City'}
         </div>
-        {/* VISIBLE LI LIST FOR CYPRESS */}
+
         {showCityList && (
-          <ul style={{
-            listStyle: "none",
-            margin: 0,
-            padding: "0",
-            boxShadow: "0 1px 6px rgba(0,0,0,0.1)",
-            borderRadius: "6px",
-            background: "#fff",
-            position: "absolute",
-            width: "100%",
-            zIndex: 9,
-            maxHeight: 160,
-            overflowY: "auto"
-          }}>
-            {cities.map(city => (
-              <li
-                key={city}
-                style={{ padding: "10px", cursor: "pointer" }}
-                onClick={() => handleCitySelect(city)}
-              >
-                {city}
-              </li>
-            ))}
+          <ul className="dropdown-list">
+            {isCityLoading ? (
+              <li className="disabled">Loading cities...</li>
+            ) : cities.length > 0 ? (
+              cities.map((city) => (
+                <li key={city} onClick={() => handleCitySelect(city)}>
+                  {city}
+                </li>
+              ))
+            ) : (
+              <li className="disabled">No cities available</li>
+            )}
           </ul>
         )}
       </div>
-      <button type="submit" id="searchBtn" className="search-btn">Search</button>
+
+      {/* Search Button */}
+      <button type="submit" id="searchBtn" className="search-btn">
+        Search
+      </button>
     </form>
   );
 };
