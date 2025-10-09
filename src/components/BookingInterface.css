@@ -1,0 +1,76 @@
+/* src/components/BookingInterface.css */
+
+.booking-modal {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(40,40,40,0.12);
+  padding: 28px;
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -35%);
+  width: 350px;
+  z-index: 40;
+}
+.booking-modal h2 {
+  color: #1976d2;
+  margin-bottom: 18px;
+  font-size: 1.14rem;
+}
+.date-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.date-select button {
+  background: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+.date-select button.selected,
+.date-select button:hover {
+  background: #1976d2;
+  color: #fff;
+}
+.time-slots {
+  display: flex;
+  gap: 18px;
+}
+.time-period p {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.time-period button {
+  background: #e3f9e6;
+  border: none;
+  border-radius: 5px;
+  padding: 7px 12px;
+  cursor: pointer;
+  margin-right: 7px;
+  margin-bottom: 6px;
+}
+.time-period button:hover {
+  background: #15b37a;
+  color: #fff;
+}
+.confirm-btn, .cancel-btn {
+  margin-top: 18px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.confirm-btn {
+  background: #1976d2;
+  color: #fff;
+  margin-right: 10px;
+}
+.cancel-btn {
+  background: #bcccdc;
+  color: #333;
+}
