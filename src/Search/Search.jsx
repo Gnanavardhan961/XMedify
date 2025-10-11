@@ -1,0 +1,61 @@
+// src/Search/Search.jsx
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import BookingModal from "../components/BookingModal/BookingModal";
+import "./Search.css";
+
+export default function Search() {
+  const [hospitals, setHospitals] = useState([]);
+  const [selectedHospital, setSelectedHospital] = useState(null);
+
+  // Get state and city from query params
+  const [searchParams] = useSearchParams();
+  const state = searchParams.get("state");
+  const city = searchParams.get("city");
+
+  // Fetch hospitals when state or city changes
+  useEffect(() => {
+    if (state && city) {
+      fetch(
+        `https://meddata-backend.onrender.com/data?state=${state}&city=${city}`
+      )
+        .then((res) => res.json())
+        .then((data) => setHospitals(data))
+        .catch(console.error);
+    }
+  }, [state, city]);
+
+  if (!state || !city) {
+    return <p>Please select a state and city from the homepage.</p>;
+  }
+
+  return (
+    <div className="search-page">
+      <h1>
+        {hospitals.length} medical centers available in {city.toLowerCase()}
+      </h1>
+
+      {hospitals.map((hospital, idx) => (
+        <div key={idx} className="hospital-card">
+          <h3>{hospital.name}</h3>
+          <p>{hospital.address}</p>
+          <p>
+            {hospital.city}, {hospital.state} {hospital.zipCode}
+          </p>
+          <p>Overall Rating: {hospital.overallRating}</p>
+          <button onClick={() => setSelectedHospital(hospital)}>
+            Book FREE Center Visit
+          </button>
+        </div>
+      ))}
+
+      {/* Booking Modal */}
+      {selectedHospital && (
+        <BookingModal
+          hospital={selectedHospital}
+          onClose={() => setSelectedHospital(null)}
+        />
+      )}
+    </div>
+  );
+}
