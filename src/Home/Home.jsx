@@ -45,38 +45,35 @@ export default function Home() {
       <form onSubmit={handleSearch}>
         {/* State Dropdown */}
         <div id="state">
-          <ul>
+          <label>Select State:</label>
+          <select
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+          >
+            <option value="">--Choose a State--</option>
             {states.map((state) => (
-              <li
-                key={state}
-                onClick={() => setSelectedState(state)}
-                style={{
-                  cursor: "pointer",
-                  fontWeight: selectedState === state ? "bold" : "normal",
-                }}
-              >
+              <option key={state} value={state}>
                 {state}
-              </li>
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
 
         {/* City Dropdown */}
         <div id="city">
-          <ul>
+          <label>Select City:</label>
+          <select
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+            disabled={!selectedState}
+          >
+            <option value="">--Choose a City--</option>
             {cities.map((city) => (
-              <li
-                key={city}
-                onClick={() => setSelectedCity(city)}
-                style={{
-                  cursor: selectedState ? "pointer" : "not-allowed",
-                  fontWeight: selectedCity === city ? "bold" : "normal",
-                }}
-              >
+              <option key={city} value={city}>
                 {city}
-              </li>
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
 
         <button type="submit" id="searchBtn">

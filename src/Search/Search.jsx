@@ -6,10 +6,12 @@ import BookingModal from "../components/BookingModal/BookingModal";
 export default function Search() {
   const [hospitals, setHospitals] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState(null);
+
   const [searchParams] = useSearchParams();
   const state = searchParams.get("state");
   const city = searchParams.get("city");
 
+  // Fetch hospitals from API
   useEffect(() => {
     if (state && city) {
       fetch(
@@ -27,12 +29,14 @@ export default function Search() {
 
   return (
     <div className="search-page">
+      {/* Search Results Heading */}
       <h1>
-        {hospitals.length} medical centers available in {city}
+        {hospitals.length} medical centers available in {city.toLowerCase()}
       </h1>
 
-      {hospitals.map((hospital) => (
-        <div key={hospital.name} className="hospital-card">
+      {/* Hospital List */}
+      {hospitals.map((hospital, idx) => (
+        <div key={idx} className="hospital-card">
           <h3>{hospital.name}</h3>
           <p>{hospital.address}</p>
           <p>
@@ -45,6 +49,7 @@ export default function Search() {
         </div>
       ))}
 
+      {/* Booking Modal */}
       {selectedHospital && (
         <BookingModal
           hospital={selectedHospital}
