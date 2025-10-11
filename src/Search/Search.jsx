@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import BookingModal from "../components/BookingModal/BookingModal";
-import "./Search.css";
+
 
 export default function Search() {
   const [hospitals, setHospitals] = useState([]);
