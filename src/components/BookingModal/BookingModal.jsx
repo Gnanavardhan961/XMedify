@@ -1,74 +1,62 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function BookingModal({ hospital, onClose }) {
-  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("Morning");
-
-  // Max 7 days from today
-  const today = new Date();
-  const maxDate = new Date();
-  maxDate.setDate(today.getDate() + 7);
+  const [selectedTime, setSelectedTime] = useState("");
 
   const handleBooking = () => {
-    if (!selectedDate) {
-      alert("Please select a date");
+    if (!selectedDate || !selectedTime) {
+      alert("Please select date and time");
       return;
     }
 
+    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const newBooking = {
-      hospital: hospital.name,
-      address: hospital.address,
+      hospitalName: hospital.name,
       city: hospital.city,
       state: hospital.state,
       zipCode: hospital.zipCode,
       date: selectedDate,
-      slot: selectedTime,
-      period: selectedTime,
+      time: selectedTime,
     };
 
-    const existingBookings = JSON.parse(localStorage.getItem("bookings") || "[]");
-    existingBookings.push(newBooking);
-    localStorage.setItem("bookings", JSON.stringify(existingBookings));
-
+    localStorage.setItem("bookings", JSON.stringify([...bookings, newBooking]));
     onClose();
-    navigate("/my-bookings");
+    alert("Booking successful!");
   };
 
   return (
     <div className="booking-modal">
-      <h2>Book Appointment at {hospital.name}</h2>
-      <p>{hospital.address}</p>
-      <label>
-        Select Date:
+      <button onClick={onClose}>Close</button>
+      <h3>Book Appointment at {hospital.name}</h3>
+
+      <div className="booking-dates">
+        <p>Today</p>
         <input
           type="date"
+          min={new Date().toISOString().split("T")[0]}
+          max={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0]}
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          min={today.toISOString().split("T")[0]}
-          max={maxDate.toISOString().split("T")[0]}
         />
-      </label>
+      </div>
 
-      <div>
-        <p>Select Time Slot:</p>
-        {["Morning", "Afternoon", "Evening"].map((slot) => (
-          <label key={slot}>
-            <input
-              type="radio"
-              name="timeSlot"
-              value={slot}
-              checked={selectedTime === slot}
-              onChange={() => setSelectedTime(slot)}
-            />
-            {slot}
-          </label>
-        ))}
+      <div className="booking-times">
+        <p>Morning</p>
+        <p>Afternoon</p>
+        <p>Evening</p>
+
+        <select value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}>
+          <option value="">Select Time Slot</option>
+          <option value="Morning">Morning</option>
+          <option value="Afternoon">Afternoon</option>
+          <option value="Evening">Evening</option>
+        </select>
       </div>
 
       <button onClick={handleBooking}>Confirm Booking</button>
-      <button onClick={onClose}>Cancel</button>
     </div>
   );
 }
