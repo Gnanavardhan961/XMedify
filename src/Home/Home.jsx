@@ -9,7 +9,7 @@ export default function Home() {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
-  // Fetch all states on mount
+  // Fetch all states
   useEffect(() => {
     fetch("https://meddata-backend.onrender.com/states")
       .then((res) => res.json())
@@ -43,16 +43,14 @@ export default function Home() {
     <div className="home-page">
       <h1>Find Medical Centers</h1>
       <form onSubmit={handleSearch}>
-        {/* States List */}
+        {/* State Dropdown */}
         <div id="state">
-          <label>Select State:</label>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {states.map((state, idx) => (
+          <ul>
+            {states.map((state) => (
               <li
-                key={idx}
+                key={state}
                 onClick={() => setSelectedState(state)}
                 style={{
-                  padding: "4px 0",
                   cursor: "pointer",
                   fontWeight: selectedState === state ? "bold" : "normal",
                 }}
@@ -63,19 +61,16 @@ export default function Home() {
           </ul>
         </div>
 
-        {/* Cities List */}
+        {/* City Dropdown */}
         <div id="city">
-          <label>Select City:</label>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {cities.map((city, idx) => (
+          <ul>
+            {cities.map((city) => (
               <li
-                key={idx}
+                key={city}
                 onClick={() => setSelectedCity(city)}
                 style={{
-                  padding: "4px 0",
                   cursor: selectedState ? "pointer" : "not-allowed",
                   fontWeight: selectedCity === city ? "bold" : "normal",
-                  color: selectedState ? "black" : "gray",
                 }}
               >
                 {city}

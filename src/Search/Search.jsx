@@ -6,7 +6,6 @@ import BookingModal from "../components/BookingModal/BookingModal";
 export default function Search() {
   const [hospitals, setHospitals] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState(null);
-
   const [searchParams] = useSearchParams();
   const state = searchParams.get("state");
   const city = searchParams.get("city");
@@ -32,12 +31,8 @@ export default function Search() {
         {hospitals.length} medical centers available in {city}
       </h1>
 
-      {hospitals.length === 0 && (
-        <p>No medical centers found for {city}.</p>
-      )}
-
-      {hospitals.map((hospital, idx) => (
-        <div key={idx} className="hospital-card">
+      {hospitals.map((hospital) => (
+        <div key={hospital.name} className="hospital-card">
           <h3>{hospital.name}</h3>
           <p>{hospital.address}</p>
           <p>
