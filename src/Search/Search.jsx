@@ -11,7 +11,6 @@ export default function Search() {
   const state = searchParams.get("state");
   const city = searchParams.get("city");
 
-  // Fetch hospitals from API
   useEffect(() => {
     if (state && city) {
       fetch(
@@ -29,12 +28,10 @@ export default function Search() {
 
   return (
     <div className="search-page">
-      {/* Search Results Heading */}
       <h1>
         {hospitals.length} medical centers available in {city.toLowerCase()}
       </h1>
 
-      {/* Hospital List */}
       {hospitals.map((hospital, idx) => (
         <div key={idx} className="hospital-card">
           <h3>{hospital.name}</h3>
@@ -49,7 +46,6 @@ export default function Search() {
         </div>
       ))}
 
-      {/* Booking Modal */}
       {selectedHospital && (
         <BookingModal
           hospital={selectedHospital}

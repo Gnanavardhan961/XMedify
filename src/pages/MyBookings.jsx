@@ -1,4 +1,3 @@
-// src/pages/MyBookings.jsx
 import React, { useEffect, useState } from "react";
 import "./MyBookings.css";
 
@@ -16,15 +15,17 @@ export default function MyBookings() {
       {bookings.length === 0 ? (
         <p>No bookings found</p>
       ) : (
-        bookings.map((b, i) => (
-          <div key={i} className="booking-card">
-            <h3>{b.hospital}</h3>
-            <p>{b.address}</p>
+        bookings.map((booking, idx) => (
+          <div key={idx} className="booking-card">
+            <h3>{booking.hospital}</h3>
+            <p>{booking.address}</p>
             <p>
-              {b.city}, {b.state} {b.zipCode}
+              {booking.city}, {booking.state} {booking.zipCode}
             </p>
-            <p>Date: {b.date}</p>
-            <p>Time: {b.period}</p>
+            <p>Date: {booking.date}</p>
+            <p>
+              Time: {booking.slot} <strong>({booking.period})</strong>
+            </p>
           </div>
         ))
       )}

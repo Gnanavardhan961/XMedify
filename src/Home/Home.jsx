@@ -1,6 +1,7 @@
 // src/Home/Home.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -43,37 +44,42 @@ export default function Home() {
     <div className="home-page">
       <h1>Find Medical Centers</h1>
       <form onSubmit={handleSearch}>
-        {/* State Dropdown */}
+        {/* State Dropdown as <ul> for Cypress */}
         <div id="state">
           <label>Select State:</label>
-          <select
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-          >
-            <option value="">--Choose a State--</option>
-            {states.map((state) => (
-              <option key={state} value={state}>
-                {state}
-              </option>
+          <ul>
+            {states.map((stateItem, idx) => (
+              <li
+                key={idx}
+                onClick={() => setSelectedState(stateItem)}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedState === stateItem ? "bold" : "normal",
+                }}
+              >
+                {stateItem}
+              </li>
             ))}
-          </select>
+          </ul>
         </div>
 
-        {/* City Dropdown */}
+        {/* City Dropdown as <ul> */}
         <div id="city">
           <label>Select City:</label>
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            disabled={!selectedState}
-          >
-            <option value="">--Choose a City--</option>
-            {cities.map((city) => (
-              <option key={city} value={city}>
-                {city}
-              </option>
+          <ul>
+            {cities.map((cityItem, idx) => (
+              <li
+                key={idx}
+                onClick={() => setSelectedCity(cityItem)}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedCity === cityItem ? "bold" : "normal",
+                }}
+              >
+                {cityItem}
+              </li>
             ))}
-          </select>
+          </ul>
         </div>
 
         <button type="submit" id="searchBtn">
