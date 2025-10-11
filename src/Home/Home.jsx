@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 export default function Home() {
   const navigate = useNavigate();
   const [states, setStates] = useState([]);
@@ -37,7 +36,6 @@ export default function Home() {
       alert("Please select both state and city");
       return;
     }
-    // Navigate to search page with query params
     navigate(`/search?state=${selectedState}&city=${selectedCity}`);
   };
 
@@ -45,35 +43,45 @@ export default function Home() {
     <div className="home-page">
       <h1>Find Medical Centers</h1>
       <form onSubmit={handleSearch}>
+        {/* States List */}
         <div id="state">
           <label>Select State:</label>
-          <select
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-          >
-            <option value="">--Choose a State--</option>
+          <ul style={{ listStyle: "none", padding: 0 }}>
             {states.map((state, idx) => (
-              <option key={idx} value={state}>
+              <li
+                key={idx}
+                onClick={() => setSelectedState(state)}
+                style={{
+                  padding: "4px 0",
+                  cursor: "pointer",
+                  fontWeight: selectedState === state ? "bold" : "normal",
+                }}
+              >
                 {state}
-              </option>
+              </li>
             ))}
-          </select>
+          </ul>
         </div>
 
+        {/* Cities List */}
         <div id="city">
           <label>Select City:</label>
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            disabled={!selectedState}
-          >
-            <option value="">--Choose a City--</option>
+          <ul style={{ listStyle: "none", padding: 0 }}>
             {cities.map((city, idx) => (
-              <option key={idx} value={city}>
+              <li
+                key={idx}
+                onClick={() => setSelectedCity(city)}
+                style={{
+                  padding: "4px 0",
+                  cursor: selectedState ? "pointer" : "not-allowed",
+                  fontWeight: selectedCity === city ? "bold" : "normal",
+                  color: selectedState ? "black" : "gray",
+                }}
+              >
                 {city}
-              </option>
+              </li>
             ))}
-          </select>
+          </ul>
         </div>
 
         <button type="submit" id="searchBtn">

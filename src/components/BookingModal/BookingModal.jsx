@@ -1,26 +1,25 @@
 // src/components/BookingModal/BookingModal.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./BookingModal.css";
 
-export default function BookingModal({ hospital }) {
-  const navigate = useNavigate();
+export default function BookingModal({ hospital, onClose }) {
   const [date, setDate] = useState("");
   const [slot, setSlot] = useState("Morning");
 
-  // Generate min/max dates for next 7 days
+  // Generate min and max dates for the next 7 days
   const today = new Date();
   const minDate = today.toISOString().split("T")[0];
   const maxDate = new Date(today.setDate(today.getDate() + 7))
     .toISOString()
     .split("T")[0];
 
-  const handleBooking = (e) => {
-    e.preventDefault();
+  const handleBooking = () => {
     if (!date) {
       alert("Please select a date");
       return;
     }
+
+    const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
 
     const newBooking = {
       hospital: hospital.name,
@@ -33,45 +32,51 @@ export default function BookingModal({ hospital }) {
       period: slot,
     };
 
-    // Retrieve existing bookings
-    const existingBookings = JSON.parse(localStorage.getItem("bookings") || "[]");
-    localStorage.setItem("bookings", JSON.stringify([...existingBookings, newBooking]));
+    bookings.push(newBooking);
+    localStorage.setItem("bookings", JSON.stringify(bookings));
 
-    // Navigate to My Bookings page
-    navigate("/my-bookings");
+    alert("Booking successful!");
+    onClose();
   };
 
   return (
-    <div className="booking-modal">
-      <h3>{hospital.name}</h3>
-      <p>{hospital.address}</p>
-      <p>
-        {hospital.city}, {hospital.state} {hospital.zipCode}
-      </p>
+    <div className="modal-backdrop">
+      <div className="booking-modal">
+        <button className="close-btn" onClick={onClose}>
+          &times;
+        </button>
+        <h2>Book Appointment at {hospital.name}</h2>
+        <p>{hospital.address}</p>
+        <p>
+          {hospital.city}, {hospital.state} {hospital.zipCode}
+        </p>
 
-      <form onSubmit={handleBooking}>
-        <label>
-          Select Date:
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            min={minDate}
-            max={maxDate}
-          />
-        </label>
+        <div className="booking-inputs">
+          <label>
+            Select Date:
+            <input
+              type="date"
+              value={date}
+              min={minDate}
+              max={maxDate}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </label>
 
-        <label>
-          Select Time Slot:
-          <select value={slot} onChange={(e) => setSlot(e.target.value)}>
-            <option value="Morning">Morning</option>
-            <option value="Afternoon">Afternoon</option>
-            <option value="Evening">Evening</option>
-          </select>
-        </label>
+          <label>
+            Select Time Slot:
+            <select value={slot} onChange={(e) => setSlot(e.target.value)}>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+            </select>
+          </label>
+        </div>
 
-        <button type="submit">Book FREE Center Visit</button>
-      </form>
+        <button className="book-btn" onClick={handleBooking}>
+          Book Appointment
+        </button>
+      </div>
     </div>
   );
 }

@@ -3,17 +3,14 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import BookingModal from "../components/BookingModal/BookingModal";
 
-
 export default function Search() {
   const [hospitals, setHospitals] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState(null);
 
-  // Get state and city from query params
   const [searchParams] = useSearchParams();
   const state = searchParams.get("state");
   const city = searchParams.get("city");
 
-  // Fetch hospitals when state or city changes
   useEffect(() => {
     if (state && city) {
       fetch(
@@ -32,8 +29,12 @@ export default function Search() {
   return (
     <div className="search-page">
       <h1>
-        {hospitals.length} medical centers available in {city.toLowerCase()}
+        {hospitals.length} medical centers available in {city}
       </h1>
+
+      {hospitals.length === 0 && (
+        <p>No medical centers found for {city}.</p>
+      )}
 
       {hospitals.map((hospital, idx) => (
         <div key={idx} className="hospital-card">
@@ -49,7 +50,6 @@ export default function Search() {
         </div>
       ))}
 
-      {/* Booking Modal */}
       {selectedHospital && (
         <BookingModal
           hospital={selectedHospital}
