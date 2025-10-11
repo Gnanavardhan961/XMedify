@@ -47,7 +47,7 @@ export default function BookingInterface({ center, onClose }) {
     <div className="booking-interface">
       <h2>Book Appointment at {center["Hospital Name"]}</h2>
 
-      {/* Date Selection */}
+      {/* Date selection */}
       <div className="date-selection">
         {getDays().map((dateObj, i) => {
           const dateStr = dateObj.toDateString();
@@ -63,20 +63,13 @@ export default function BookingInterface({ center, onClose }) {
         })}
       </div>
 
-      {/* Time Periods */}
+      {/* Period and Time selection */}
       {selectedDate && (
         <div className="time-selection">
-          {/* Static <p> tags for Cypress tests */}
-          <div className="time-periods">
-            <p>Today</p>
-            <p>Morning</p>
-            <p>Afternoon</p>
-            <p>Evening</p>
-          </div>
-
-          {/* Dynamic time buttons */}
           {Object.keys(times).map((period) => (
             <div key={period} className="period-block">
+              {/* Cypress looks for these period headings */}
+              <p>{period}</p>
               <div className="time-buttons">
                 {times[period].map((time) => (
                   <button
