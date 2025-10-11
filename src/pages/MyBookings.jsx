@@ -17,15 +17,12 @@ export default function MyBookings() {
       ) : (
         bookings.map((booking, idx) => (
           <div key={idx} className="booking-card">
-            <h3>{booking.hospital}</h3>
-            <p>{booking.address}</p>
+            <h3>{booking.hospitalName}</h3>
             <p>
               {booking.city}, {booking.state} {booking.zipCode}
             </p>
             <p>Date: {booking.date}</p>
-            <p>
-              Time: {booking.slot} <strong>({booking.period})</strong>
-            </p>
+            <p>Time: {booking.time}</p>
           </div>
         ))
       )}
