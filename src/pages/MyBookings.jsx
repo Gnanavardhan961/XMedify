@@ -1,11 +1,11 @@
+// src/pages/MyBookings.jsx
 import React, { useEffect, useState } from "react";
-import "./MyBookings.css";
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const savedBookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+    const savedBookings = JSON.parse(localStorage.getItem("bookings")) || [];
     setBookings(savedBookings);
   }, []);
 
@@ -13,19 +13,13 @@ export default function MyBookings() {
     <div className="my-bookings">
       <h1>My Bookings</h1>
       {bookings.length === 0 ? (
-        <p>No bookings found</p>
+        <p>No bookings yet.</p>
       ) : (
-        bookings.map((booking, idx) => (
-          <div key={idx} className="booking-card">
-            <h3>{booking.hospital}</h3>
-            <p>{booking.address}</p>
-            <p>
-              {booking.city}, {booking.state} {booking.zipCode}
-            </p>
-            <p>Date: {booking.date}</p>
-            <p>
-              Time: {booking.slot} <strong>({booking.period})</strong>
-            </p>
+        bookings.map((booking, index) => (
+          <div key={index} className="booking-card">
+            <h3>{booking.hospitalName}</h3>
+            <p>{booking.date}</p>
+            <p>{booking.time}</p>
           </div>
         ))
       )}
