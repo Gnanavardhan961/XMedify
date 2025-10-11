@@ -1,65 +1,62 @@
-// src/components/BookingModal/BookingModal.jsx
 import React, { useState } from "react";
 
 export default function BookingModal({ hospital, onClose }) {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
-  const timeSlots = ["Morning", "Afternoon", "Evening"];
+  const handleBooking = () => {
+    if (!selectedDate || !selectedTime) {
+      alert("Please select date and time");
+      return;
+    }
 
-  const handleBook = () => {
-    if (!selectedDate || !selectedTime) return alert("Select date and time");
-
-    const booking = {
+    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    const newBooking = {
       hospitalName: hospital.name,
+      city: hospital.city,
+      state: hospital.state,
+      zipCode: hospital.zipCode,
       date: selectedDate,
       time: selectedTime,
     };
 
-    const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    localStorage.setItem("bookings", JSON.stringify([...existingBookings, booking]));
-
-    alert("Booking Confirmed!");
+    localStorage.setItem("bookings", JSON.stringify([...bookings, newBooking]));
     onClose();
+    alert("Booking successful!");
   };
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
-        <h3>{hospital.name}</h3>
-        <p>{hospital.address}</p>
-        <p>{hospital.city}, {hospital.state} {hospital.zipCode}</p>
+    <div className="booking-modal">
+      <button onClick={onClose}>Close</button>
+      <h3>Book Appointment at {hospital.name}</h3>
 
-        <label>
-          Select Date:
-          <input
-            type="date"
-            min={new Date().toISOString().split("T")[0]}
-            max={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-          />
-        </label>
-
+      <div className="booking-dates">
         <p>Today</p>
-        <div className="time-slots">
-          {timeSlots.map((slot) => (
-            <p
-              key={slot}
-              onClick={() => setSelectedTime(slot)}
-              style={{
-                cursor: "pointer",
-                fontWeight: selectedTime === slot ? "bold" : "normal",
-              }}
-            >
-              {slot}
-            </p>
-          ))}
-        </div>
-
-        <button onClick={handleBook}>Book FREE Center Visit</button>
-        <button onClick={onClose}>Close</button>
+        <input
+          type="date"
+          min={new Date().toISOString().split("T")[0]}
+          max={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0]}
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+        />
       </div>
+
+      <div className="booking-times">
+        <p>Morning</p>
+        <p>Afternoon</p>
+        <p>Evening</p>
+
+        <select value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}>
+          <option value="">Select Time Slot</option>
+          <option value="Morning">Morning</option>
+          <option value="Afternoon">Afternoon</option>
+          <option value="Evening">Evening</option>
+        </select>
+      </div>
+
+      <button onClick={handleBooking}>Confirm Booking</button>
     </div>
   );
 }
