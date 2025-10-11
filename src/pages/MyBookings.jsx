@@ -5,9 +5,8 @@ export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    // Fetch saved bookings from localStorage
-    const savedBookings = JSON.parse(localStorage.getItem("bookings") || "[]");
-    setBookings(savedBookings);
+    const saved = JSON.parse(localStorage.getItem("bookings") || "[]");
+    setBookings(saved);
   }, []);
 
   return (
@@ -17,17 +16,16 @@ export default function MyBookings() {
       {bookings.length === 0 ? (
         <p>No bookings found</p>
       ) : (
-        bookings.map((booking, index) => (
-          <div key={index} className="booking-card">
-            <h3>{booking.hospital || booking.hospitalName}</h3>
-            <p>{booking.address}</p>
+        bookings.map((b, i) => (
+          <div key={i} className="booking-card">
+            <h3>{b.hospital || b.hospitalName}</h3>
+            <p>{b.address}</p>
             <p>
-              {booking.city}, {booking.state} {booking.zipCode}
+              {b.city}, {b.state} {b.zipCode}
             </p>
-            <p>Date: {booking.date}</p>
+            <p>Date: {b.date}</p>
             <p>
-              Time: {booking.time || booking.slot}{" "}
-              <strong>({booking.period || "Morning"})</strong>
+              Time: {b.time || b.slot} ({b.period ? b.period : "Morning"})
             </p>
           </div>
         ))
