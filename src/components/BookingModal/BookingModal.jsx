@@ -1,3 +1,4 @@
+// src/components/BookingModal/BookingModal.jsx
 import React, { useState } from "react";
 
 export default function BookingModal({ hospital, onClose }) {
@@ -12,10 +13,10 @@ export default function BookingModal({ hospital, onClose }) {
 
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const newBooking = {
-      hospitalName: hospital.name,
-      city: hospital.city,
-      state: hospital.state,
-      zipCode: hospital.zipCode,
+      hospitalName: hospital["Hospital Name"],
+      city: hospital["City"],
+      state: hospital["State"],
+      zipCode: hospital["ZIP Code"],
       date: selectedDate,
       time: selectedTime,
     };
@@ -25,19 +26,22 @@ export default function BookingModal({ hospital, onClose }) {
     alert("Booking successful!");
   };
 
+  const today = new Date().toISOString().split("T")[0];
+  const maxDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0];
+
   return (
     <div className="booking-modal">
       <button onClick={onClose}>Close</button>
-      <h3>Book Appointment at {hospital.name}</h3>
+      <h3>Book Appointment at {hospital["Hospital Name"]}</h3>
 
       <div className="booking-dates">
         <p>Today</p>
         <input
           type="date"
-          min={new Date().toISOString().split("T")[0]}
-          max={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-            .toISOString()
-            .split("T")[0]}
+          min={today}
+          max={maxDate}
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
         />

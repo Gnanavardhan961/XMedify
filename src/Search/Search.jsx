@@ -34,12 +34,12 @@ export default function Search() {
 
       {hospitals.map((hospital, idx) => (
         <div key={idx} className="hospital-card">
-          <h3>{hospital.name}</h3>
-          <p>{hospital.address}</p>
+          <h3>{hospital["Hospital Name"]}</h3>
+          <p>{hospital["Address"]}</p>
           <p>
-            {hospital.city}, {hospital.state} {hospital.zipCode}
+            {hospital["City"]}, {hospital["State"]} {hospital["ZIP Code"]}
           </p>
-          <p>Overall Rating: {hospital.overallRating}</p>
+          <p>Overall Rating: {hospital["Overall Rating"]}</p>
           <button onClick={() => setSelectedHospital(hospital)}>
             Book FREE Center Visit
           </button>
