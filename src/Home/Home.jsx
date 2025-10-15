@@ -1,6 +1,6 @@
 // src/Home/Home.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Home.css";
 
 export default function Home() {
@@ -42,9 +42,17 @@ export default function Home() {
 
   return (
     <div className="home-page">
+      {/* Navigation / Tabs */}
+      <nav className="home-nav">
+        <Link to="/" style={{ marginRight: "20px", fontWeight: "bold" }}>
+          Home
+        </Link>
+        <Link to="/my-bookings">My Bookings</Link>
+      </nav>
+
       <h1>Find Medical Centers</h1>
       <form onSubmit={handleSearch}>
-        {/* State Dropdown as <ul> for Cypress */}
+        {/* State Dropdown */}
         <div id="state">
           <label>Select State:</label>
           <ul>
@@ -63,7 +71,7 @@ export default function Home() {
           </ul>
         </div>
 
-        {/* City Dropdown as <ul> */}
+        {/* City Dropdown */}
         <div id="city">
           <label>Select City:</label>
           <ul>
