@@ -5,8 +5,8 @@ export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("bookings")) || [];
-    setBookings(stored);
+    const localBookings = localStorage.getItem("bookings") || "[]";
+    setBookings(JSON.parse(localBookings));
   }, []);
 
   return (
