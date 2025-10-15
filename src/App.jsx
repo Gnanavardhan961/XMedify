@@ -1,9 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Correct imports based on your folder structure
 import Home from "./Home/Home";
 import Search from "./Search/Search";
 import MyBookings from "./pages/MyBookings";
 import Navbar from "./components/Navbar/Navbar";
+
 import "./App.css";
 
 export default function App() {
