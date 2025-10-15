@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./Home/Home";
 import Search from "./Search/Search";
-import MyBookings from "./pages/MyBookings";
+import MyBookings from "./MyBookings/MyBookings";
 import "./App.css";
 
 export default function App() {
