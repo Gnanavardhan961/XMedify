@@ -1,7 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
-// Correct imports based on your folder structure
 import Home from "./Home/Home";
 import Search from "./Search/Search";
 import MyBookings from "./pages/MyBookings";
@@ -11,13 +10,13 @@ import "./App.css";
 
 export default function App() {
   return (
-    <Router basename="/">
+    <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/my-bookings" element={<MyBookings />} />
       </Routes>
-    </Router>
+    </>
   );
 }
