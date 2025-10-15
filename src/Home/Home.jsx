@@ -47,34 +47,39 @@ export default function Home() {
         {/* State Dropdown */}
         <div id="state">
           <label>Select State:</label>
-          <select
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-          >
-            <option value="">--Select State--</option>
+          <ul>
             {states.map((stateItem, idx) => (
-              <option key={idx} value={stateItem}>
+              <li
+                key={idx}
+                onClick={() => setSelectedState(stateItem)}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedState === stateItem ? "bold" : "normal",
+                }}
+              >
                 {stateItem}
-              </option>
+              </li>
             ))}
-          </select>
+          </ul>
         </div>
 
         {/* City Dropdown */}
         <div id="city">
           <label>Select City:</label>
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            disabled={!selectedState}
-          >
-            <option value="">--Select City--</option>
+          <ul>
             {cities.map((cityItem, idx) => (
-              <option key={idx} value={cityItem}>
+              <li
+                key={idx}
+                onClick={() => setSelectedCity(cityItem)}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedCity === cityItem ? "bold" : "normal",
+                }}
+              >
                 {cityItem}
-              </option>
+              </li>
             ))}
-          </select>
+          </ul>
         </div>
 
         <button type="submit" id="searchBtn">
