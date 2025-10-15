@@ -1,4 +1,3 @@
-// src/Home/Home.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
@@ -48,39 +47,34 @@ export default function Home() {
         {/* State Dropdown */}
         <div id="state">
           <label>Select State:</label>
-          <ul>
+          <select
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+          >
+            <option value="">--Select State--</option>
             {states.map((stateItem, idx) => (
-              <li
-                key={idx}
-                onClick={() => setSelectedState(stateItem)}
-                style={{
-                  cursor: "pointer",
-                  fontWeight: selectedState === stateItem ? "bold" : "normal",
-                }}
-              >
+              <option key={idx} value={stateItem}>
                 {stateItem}
-              </li>
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
 
         {/* City Dropdown */}
         <div id="city">
           <label>Select City:</label>
-          <ul>
+          <select
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+            disabled={!selectedState}
+          >
+            <option value="">--Select City--</option>
             {cities.map((cityItem, idx) => (
-              <li
-                key={idx}
-                onClick={() => setSelectedCity(cityItem)}
-                style={{
-                  cursor: "pointer",
-                  fontWeight: selectedCity === cityItem ? "bold" : "normal",
-                }}
-              >
+              <option key={idx} value={cityItem}>
                 {cityItem}
-              </li>
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
 
         <button type="submit" id="searchBtn">
