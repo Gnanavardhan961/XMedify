@@ -1,10 +1,12 @@
 // src/Home/Home.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import "./Home.css";
 
 export default function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState("");
@@ -42,14 +44,25 @@ export default function Home() {
 
   return (
     <div className="home-page">
-      {/* Navigation / Tabs */}
-      <nav className="home-nav">
-        <Link to="/" style={{ marginRight: "20px", fontWeight: "bold" }}>
+      {/* --- Navigation Tabs --- */}
+      <nav className="navbar">
+        <Link
+          to="/"
+          className={location.pathname === "/" ? "nav-link active" : "nav-link"}
+        >
           Home
         </Link>
-        <Link to="/my-bookings">My Bookings</Link>
+        <Link
+          to="/my-bookings"
+          className={
+            location.pathname === "/my-bookings" ? "nav-link active" : "nav-link"
+          }
+        >
+          My Bookings
+        </Link>
       </nav>
 
+      {/* --- Main Content --- */}
       <h1>Find Medical Centers</h1>
       <form onSubmit={handleSearch}>
         {/* State Dropdown */}
