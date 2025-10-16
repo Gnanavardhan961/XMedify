@@ -17,7 +17,8 @@ export default function MyBookings() {
         <ul>
           {bookings.map((b, index) => (
             <li key={index} className="booking-item">
-              <p>{b["Hospital Name"]}</p>
+              {/* Use h3 for hospital name so Cypress can find it */}
+              <h3>{b["Hospital Name"]}</h3>
               <p>{b.City}</p>
               <p>{b.State}</p>
               <p>{b.bookingDate}</p>
