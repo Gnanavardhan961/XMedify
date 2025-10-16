@@ -1,4 +1,3 @@
-// src/components/BookingModal/BookingModal.jsx
 import React, { useState } from "react";
 
 export default function BookingModal({ hospital, onClose }) {
@@ -13,12 +12,13 @@ export default function BookingModal({ hospital, onClose }) {
 
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const newBooking = {
-      hospitalName: hospital["Hospital Name"],
-      city: hospital["City"],
-      state: hospital["State"],
-      zipCode: hospital["ZIP Code"],
-      date: selectedDate,
-      time: selectedTime,
+      "Hospital Name": hospital["Hospital Name"],
+      "City": hospital["City"],
+      "State": hospital["State"],
+      "Hospital Type": hospital["Hospital Type"],
+      "Hospital overall rating": hospital["Hospital overall rating"],
+      bookingDate: selectedDate,
+      bookingType: selectedTime,
     };
 
     localStorage.setItem("bookings", JSON.stringify([...bookings, newBooking]));
@@ -37,7 +37,7 @@ export default function BookingModal({ hospital, onClose }) {
       <h3>Book Appointment at {hospital["Hospital Name"]}</h3>
 
       <div className="booking-dates">
-        <p>Today</p>
+        <p>Select Date:</p>
         <input
           type="date"
           min={today}
@@ -48,12 +48,12 @@ export default function BookingModal({ hospital, onClose }) {
       </div>
 
       <div className="booking-times">
-        <p>Morning</p>
-        <p>Afternoon</p>
-        <p>Evening</p>
-
-        <select value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}>
-          <option value="">Select Time Slot</option>
+        <p>Select Time Slot:</p>
+        <select
+          value={selectedTime}
+          onChange={(e) => setSelectedTime(e.target.value)}
+        >
+          <option value="">Select</option>
           <option value="Morning">Morning</option>
           <option value="Afternoon">Afternoon</option>
           <option value="Evening">Evening</option>
