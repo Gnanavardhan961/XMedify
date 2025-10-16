@@ -11,7 +11,7 @@ export default function MyBookings() {
 
   return (
     <div className="my-bookings">
-      <h2>My Bookings</h2>
+      <h1>My Bookings</h1>
       {bookings.length === 0 ? (
         <p>No bookings found.</p>
       ) : (
