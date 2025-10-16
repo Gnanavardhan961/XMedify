@@ -37,15 +37,15 @@ export default function BookingModal({ hospital, onClose }) {
       <h3>Book Appointment at {hospital["Hospital Name"]}</h3>
 
       <div className="booking-dates">
-        <p>Select Date:</p>
-        <input
-          type="date"
-          min={today}
-          max={maxDate}
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-        />
-      </div>
+  <p>Today</p>
+  <input
+    type="date"
+    min={today}
+    max={maxDate}
+    value={selectedDate}
+    onChange={(e) => setSelectedDate(e.target.value)}
+  />
+</div>
 
       <div className="booking-times">
         <p>Select Time Slot:</p>
